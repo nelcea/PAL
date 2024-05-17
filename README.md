@@ -10,4 +10,9 @@ Some key aspects I'd like to take into account:
 - privacy, running as much as possible locally
 - disconnected, should be able to use as many features as possible without an internet connection
 
-I'm currently working on a prototype iOS application that uses [Friend](https://github.com/BasedHardware/Friend) hardware and does the transcription locally on the iPhone. I will publish the code for this as soon as I have something working.
+The first part of the code is now available.  
+It is an iOS application that uses [Friend](https://github.com/BasedHardware/Friend) hardware to record conversations.  
+At this stage, it only records the audio transmitted over BLE and stores it on the phone.  
+There is no processing, transcription, summarization or chat ability at this stage.  
+There was no effort on the UI/UX at this stage and code needs a bit of clean-up.  
+It's provided as is for people that would already find it useful or want to see how to setup a connection with Friend.  

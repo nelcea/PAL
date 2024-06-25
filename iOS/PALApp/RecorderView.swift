@@ -10,22 +10,27 @@ import SwiftUI
 struct RecorderView: View {
     
     @ObservedObject var bleManager: BLEManager
-    @ObservedObject var wearable: Friend
+    @ObservedObject var wearable: WearableDevice
+    var device: AudioRecordingDevice {
+        wearable as! AudioRecordingDevice
+    }
+
     @ObservedObject var recordingManager: RecordingManager
 
     @ObservedObject var stopwatch =  Stopwatch()
     
+    
     var body: some View {
         Button() {
-            if wearable.isRecording {
+            if device.isRecording {
                 stopRecording()
             } else {
                 startRecording()
             }
         } label: {
-            Label(wearable.isRecording ? "stop" : "record", systemImage: wearable.isRecording ? "stop.circle" : "record.circle")
+            Label(device.isRecording ? "stop" : "record", systemImage: device.isRecording ? "stop.circle" : "record.circle")
         }
-        if wearable.isRecording {
+        if device.isRecording {
             Text(stopwatch.formattedTime)
         }
     }

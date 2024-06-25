@@ -15,28 +15,21 @@ struct RecordingView: View {
     @StateObject var audioPlayer = AudioPlayer()
 
     var body: some View {
-        VStack {
-            Text(recording.fileURL.lastPathComponent)
-            Text("\(recording.startDate, format: .dateTime)")
-            Button(audioPlayer.playing ? "Stop" :"Play") {
-                if audioPlayer.playing {
-                    audioPlayer.stop()
-                } else {
-                    print("Trying to play \(audioPlayer.play())")
-                }
-            }
-            .padding(10)
-            // TODO: add a proper UI for a player, at least time information
-            
-            // TODO: add button to transcribe using ASR
-            ShareLink(item: recording, preview: SharePreview("Share"))
-                .padding(10)
+        TabView {
+            RecordingInfoView(recording: recording)
+            RecordingPlayerView(recording: recording)
+            RecordingTranscriptionView(recording: recording)
         }
+        #if os(iOS)
+        .tabViewStyle(.page)
+        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+        #endif
         .onAppear() {
             audioPlayer.load(recording: recording)
 
             recording.readInfo()
         }
+        .navigationTitle(recording.fileURL.lastPathComponent)
     }
 }
 

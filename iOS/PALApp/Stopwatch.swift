@@ -27,7 +27,13 @@ class Stopwatch: ObservableObject {
         startTime = Date()
         // TODO: fix warnings using other method for periodic variable update
         timer = Timer.scheduledTimer(withTimeInterval: refreshInternal, repeats: true, block: { [self] _ in
-            self.time = Date().timeIntervalSince(startTime!)
+            Task { @MainActor in
+                if let startTime {
+                    self.time = Date().timeIntervalSince(startTime)
+                } else {
+                    self.time = 0.0
+                }
+            }
         })
     }
     

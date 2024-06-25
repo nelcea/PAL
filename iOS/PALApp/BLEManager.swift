@@ -40,19 +40,19 @@ class BLEManager : NSObject, ObservableObject {
 
     let valueChanges = PassthroughSubject<(CBUUID, Data), Error>()
     
-    var connectedDevice: Friend?
+    var connectedDevice: WearableDevice?
     
-    private var wearableRegistry: [any WearableDevice.Type] = []
+    private var wearableRegistry: [WearableDevice.Type] = []
 
     private var manager: CBCentralManager?
     private var peripheral: CBPeripheral?
     private var scanServices: [CBUUID] = []
     private var shouldStartScanning = false
     
-    func registerDevice(wearable: any WearableDevice.Type) {
-        if !scanServices.contains(wearable.scanServiceUUID) {
+    func registerDevice(wearable: WearableDevice.Type) {
+        if !scanServices.contains(wearable.deviceConfiguration.scanServiceUUID) {
             wearableRegistry.append(wearable)
-            scanServices.append(wearable.scanServiceUUID)
+            scanServices.append(wearable.deviceConfiguration.scanServiceUUID)
         }
         // TODO: return error if service with same scan UUID already registered
     }
@@ -81,7 +81,7 @@ class BLEManager : NSObject, ObservableObject {
     func connect(to: UUID) {
         if let manager, let peripheral = discoveredPeripheralsMap[to] {
             manager.stopScan()
-            manager.connect(peripheral)
+            manager.connect(peripheral, options: [CBConnectPeripheralOptionNotifyOnDisconnectionKey: true])
             status = .connecting
         }
     }
@@ -141,8 +141,8 @@ extension BLEManager : CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: (any Error)?) {
         if let services = peripheral.services {
             for service in services {
-                if let wearable = wearableRegistry.first(where: { $0.scanServiceUUID == service.uuid }) {
-                    connectedDevice = wearable.init(bleManager: self, name: peripheral.name ?? peripheral.identifier.uuidString) as! Friend
+                if let wearable = wearableRegistry.first(where: { $0.deviceConfiguration.scanServiceUUID == service.uuid }) {
+                    connectedDevice = wearable.init(bleManager: self, name: peripheral.name ?? peripheral.identifier.uuidString)
                     status = .linked
                 }
             }
@@ -161,9 +161,11 @@ extension BLEManager : CBPeripheralDelegate {
                 characteristicsRegistry[c.uuid] = c
                 print("Discovered characteristic \(c)")
                 if let connectedDevice {
-                    if connectedDevice.notifyCharacteristicsUUIDs.contains(c.uuid) {
+                    if type(of: connectedDevice).deviceConfiguration.notifyCharacteristicsUUIDs.contains(c.uuid) {
                         print("Asking for notifications")
                         peripheral.setNotifyValue(true, for: c)
+                        peripheral.readValue(for: c)
+                    } else {
                         peripheral.readValue(for: c)
                     }
                 }

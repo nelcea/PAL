@@ -23,6 +23,7 @@ class Recording: Identifiable, Hashable {
     var fileURL: URL
     
     private var audioFormat: AVAudioFormat?
+    private var codec: Codec?
     private var recordingFile: AVAudioFile?
     
     init(fileURL: URL) {
@@ -46,44 +47,21 @@ class Recording: Identifiable, Hashable {
         }
     }
     
-    func startRecording() -> Bool {
-        let sampleRate: Double = 8000
-        audioFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: sampleRate, channels: 1, interleaved: false)
-        guard let audioFormat else { return false }
-        recordingFile = try? AVAudioFile(forWriting: fileURL, settings: audioFormat.settings)
+    func startRecording(usingCodec codec: Codec) -> Bool {
+        self.codec = codec
+        audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: codec.sampleRate, channels: 1, interleaved: false)
+        
+        let recordingFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: codec.sampleRate, channels: 1, interleaved: false)
+        guard let recordingFormat else { return false }
+        recordingFile = try? AVAudioFile(forWriting: fileURL, settings: recordingFormat.settings, commonFormat: .pcmFormatInt16, interleaved: false)
         return recordingFile != nil
     }
     
+    // data must contain audio in Int16, little endian
     func append(data: Data) {
-        if let audioFormat, let recordingFile {
-            guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: UInt32(data.count / MemoryLayout<Int16>.size)) else {
-                print("Error creating PCM buffer")
-                return
-            }
-            
-            pcmBuffer.frameLength = pcmBuffer.frameCapacity
-            
-            let u16array = data.withUnsafeBytes {
-                Array($0.bindMemory(to: Int16.self)).map(Int16.init(littleEndian:))
-            }
-            
-            /*
-             This normalisation by block does not work, it makes the noise stand out way too much
-            let factor = max(abs(u16array.min()!), u16array.max()!)
-            let f32Array = u16array.map({(Float32($0) / Float32(factor))})
-             */
-            let f32Array = u16array.map({Float32($0) / 32768})
-
-            let channels = UnsafeBufferPointer(start: pcmBuffer.floatChannelData, count: Int(pcmBuffer.format.channelCount))
-            
-            let floatData = f32Array.withUnsafeBufferPointer( { Data(buffer: $0 )})
-            
-            UnsafeMutableRawPointer(channels[0]).withMemoryRebound(to: UInt8.self, capacity: data.count * 2) {
-                (bytes: UnsafeMutablePointer<UInt8>) in
-                floatData.copyBytes(to: bytes, count: floatData.count)
-            }
-            
+        if let recordingFile, let codec {
             do {
+                let pcmBuffer = try codec.pcmBuffer(data: data)
                 try recordingFile.write(from: pcmBuffer)
                 print("Saved a block of \(pcmBuffer.frameLength) samples")
             } catch {
@@ -94,6 +72,7 @@ class Recording: Identifiable, Hashable {
     
     func closeRecording() {
         recordingFile = nil
+        codec = nil
     }
 }
 

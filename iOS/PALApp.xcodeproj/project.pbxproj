@@ -13,6 +13,11 @@
 		916A24B52BED5BF300F32E0D /* Stopwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A24B42BED5BF300F32E0D /* Stopwatch.swift */; };
 		916A24B72BEF52A500F32E0D /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A24B62BEF52A500F32E0D /* AudioPlayer.swift */; };
 		916A24B92BF0C96000F32E0D /* WearableInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A24B82BF0C96000F32E0D /* WearableInfoView.swift */; };
+		916F8BB52C2976830017E0EA /* Codecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916F8BB42C2976830017E0EA /* Codecs.swift */; };
+		91928F922BFFA69400C3B9B0 /* BLEAssignedNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91928F912BFFA69400C3B9B0 /* BLEAssignedNumber.swift */; };
+		91BC88942C214ABE0061AB2F /* RecordingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC88932C214ABE0061AB2F /* RecordingPlayerView.swift */; };
+		91BC88962C214DAA0061AB2F /* RecordingTranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC88952C214DAA0061AB2F /* RecordingTranscriptionView.swift */; };
+		91BC88982C2353D50061AB2F /* RecordingInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC88972C2353D50061AB2F /* RecordingInfoView.swift */; };
 		91EFC5532BDCEFBB0098D265 /* PALAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5522BDCEFBB0098D265 /* PALAppApp.swift */; };
 		91EFC5552BDCEFBB0098D265 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5542BDCEFBB0098D265 /* ContentView.swift */; };
 		91EFC5572BDCEFBC0098D265 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91EFC5562BDCEFBC0098D265 /* Assets.xcassets */; };
@@ -20,6 +25,7 @@
 		91EFC5632BDCF04B0098D265 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5622BDCF04B0098D265 /* BLEManager.swift */; };
 		91EFC5652BDCFB8C0098D265 /* WearableDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5642BDCFB8C0098D265 /* WearableDevice.swift */; };
 		91EFC5672BDCFBED0098D265 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5662BDCFBED0098D265 /* Friend.swift */; };
+		91EFC5692BDCFC520098D265 /* PAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5682BDCFC520098D265 /* PAL.swift */; };
 		91EFC56B2BDD2BA80098D265 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC56A2BDD2BA80098D265 /* DeviceView.swift */; };
 		91EFC56D2BDF68520098D265 /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC56C2BDF68520098D265 /* Recording.swift */; };
 		91EFC56F2BE003290098D265 /* RecordingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC56E2BE003290098D265 /* RecordingManager.swift */; };
@@ -33,6 +39,11 @@
 		916A24B42BED5BF300F32E0D /* Stopwatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopwatch.swift; sourceTree = "<group>"; };
 		916A24B62BEF52A500F32E0D /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		916A24B82BF0C96000F32E0D /* WearableInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearableInfoView.swift; sourceTree = "<group>"; };
+		916F8BB42C2976830017E0EA /* Codecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codecs.swift; sourceTree = "<group>"; };
+		91928F912BFFA69400C3B9B0 /* BLEAssignedNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAssignedNumber.swift; sourceTree = "<group>"; };
+		91BC88932C214ABE0061AB2F /* RecordingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingPlayerView.swift; sourceTree = "<group>"; };
+		91BC88952C214DAA0061AB2F /* RecordingTranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingTranscriptionView.swift; sourceTree = "<group>"; };
+		91BC88972C2353D50061AB2F /* RecordingInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingInfoView.swift; sourceTree = "<group>"; };
 		91EFC54F2BDCEFBB0098D265 /* PALApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PALApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91EFC5522BDCEFBB0098D265 /* PALAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PALAppApp.swift; sourceTree = "<group>"; };
 		91EFC5542BDCEFBB0098D265 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -43,6 +54,7 @@
 		91EFC5622BDCF04B0098D265 /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		91EFC5642BDCFB8C0098D265 /* WearableDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearableDevice.swift; sourceTree = "<group>"; };
 		91EFC5662BDCFBED0098D265 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		91EFC5682BDCFC520098D265 /* PAL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAL.swift; sourceTree = "<group>"; };
 		91EFC56A2BDD2BA80098D265 /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		91EFC56C2BDF68520098D265 /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
 		91EFC56E2BE003290098D265 /* RecordingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingManager.swift; sourceTree = "<group>"; };
@@ -88,6 +100,7 @@
 				91EFC5622BDCF04B0098D265 /* BLEManager.swift */,
 				91EFC5642BDCFB8C0098D265 /* WearableDevice.swift */,
 				91EFC5662BDCFBED0098D265 /* Friend.swift */,
+				91EFC5682BDCFC520098D265 /* PAL.swift */,
 				91EFC56A2BDD2BA80098D265 /* DeviceView.swift */,
 				91EFC56C2BDF68520098D265 /* Recording.swift */,
 				91EFC56E2BE003290098D265 /* RecordingManager.swift */,
@@ -98,6 +111,11 @@
 				916A24B42BED5BF300F32E0D /* Stopwatch.swift */,
 				916A24B62BEF52A500F32E0D /* AudioPlayer.swift */,
 				916A24B82BF0C96000F32E0D /* WearableInfoView.swift */,
+				91928F912BFFA69400C3B9B0 /* BLEAssignedNumber.swift */,
+				91BC88932C214ABE0061AB2F /* RecordingPlayerView.swift */,
+				91BC88952C214DAA0061AB2F /* RecordingTranscriptionView.swift */,
+				91BC88972C2353D50061AB2F /* RecordingInfoView.swift */,
+				916F8BB42C2976830017E0EA /* Codecs.swift */,
 			);
 			path = PALApp;
 			sourceTree = "<group>";
@@ -181,16 +199,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				91EFC5552BDCEFBB0098D265 /* ContentView.swift in Sources */,
+				91BC88962C214DAA0061AB2F /* RecordingTranscriptionView.swift in Sources */,
 				91EFC56F2BE003290098D265 /* RecordingManager.swift in Sources */,
 				916A24B72BEF52A500F32E0D /* AudioPlayer.swift in Sources */,
+				91EFC5692BDCFC520098D265 /* PAL.swift in Sources */,
 				91EFC5632BDCF04B0098D265 /* BLEManager.swift in Sources */,
 				916A24922BE7694000F32E0D /* RecordingsListView.swift in Sources */,
+				916F8BB52C2976830017E0EA /* Codecs.swift in Sources */,
 				916A24B52BED5BF300F32E0D /* Stopwatch.swift in Sources */,
 				91EFC56B2BDD2BA80098D265 /* DeviceView.swift in Sources */,
 				916A24942BE769FC00F32E0D /* RecorderView.swift in Sources */,
+				91BC88982C2353D50061AB2F /* RecordingInfoView.swift in Sources */,
 				91EFC5672BDCFBED0098D265 /* Friend.swift in Sources */,
+				91928F922BFFA69400C3B9B0 /* BLEAssignedNumber.swift in Sources */,
 				91EFC5712BE0BAD50098D265 /* RecordingView.swift in Sources */,
 				916A24B92BF0C96000F32E0D /* WearableInfoView.swift in Sources */,
+				91BC88942C214ABE0061AB2F /* RecordingPlayerView.swift in Sources */,
 				916A24962BE8A9E800F32E0D /* BLEDeviceSelectionView.swift in Sources */,
 				91EFC5652BDCFB8C0098D265 /* WearableDevice.swift in Sources */,
 				91EFC5532BDCEFBB0098D265 /* PALAppApp.swift in Sources */,
@@ -333,6 +357,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PALApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Scan for and connect to AI wearables";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition is used to transcribed recording text on device.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -351,11 +376,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = be.nelcea.PALApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -375,6 +399,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PALApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Scan for and connect to AI wearables";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition is used to transcribed recording text on device.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -393,11 +418,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = be.nelcea.PALApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

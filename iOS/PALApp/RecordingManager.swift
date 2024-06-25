@@ -9,7 +9,11 @@ import Foundation
 
 class RecordingManager: ObservableObject {
     
-    var wearable: Friend?
+    var wearable: WearableDevice?
+    var device: AudioRecordingDevice? {
+        wearable as? AudioRecordingDevice
+    }
+
     var currentRecording: Recording?
 
     @Published var recordings: [Recording] = []
@@ -60,15 +64,15 @@ class RecordingManager: ObservableObject {
     }
     
     func startRecording() {
-        if let wearable {
+        if let device {
             currentRecording = createRecording()
-            wearable.start(recording: currentRecording!)
+            device.start(recording: currentRecording!)
         }
     }
     
     func stopRecording() {
-        if let wearable {
-            wearable.stopRecording()
+        if let device {
+            device.stopRecording()
             if let r = currentRecording {
                 add(recording: r)
                 currentRecording = nil

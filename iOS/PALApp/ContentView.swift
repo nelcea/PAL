@@ -11,7 +11,7 @@ struct ContentView: View {
     @StateObject var recordingManager = RecordingManager()
     @StateObject var bleManager = BLEManager()
     
-    @State var wearable: Friend?
+    @State var wearable: WearableDevice?
 
     @State var isSelectingDevice = false
     
@@ -37,6 +37,7 @@ struct ContentView: View {
         }
         .onAppear() {
             bleManager.registerDevice(wearable: Friend.self)
+            bleManager.registerDevice(wearable: PAL.self)
             recordingManager.readRecordings()
         }
         .onChange(of: bleManager.status) {

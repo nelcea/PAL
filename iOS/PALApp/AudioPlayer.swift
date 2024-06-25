@@ -34,8 +34,10 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         player?.stop()
     }
     
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        playing = false
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        Task { @MainActor in
+            playing = false
+        }
     }
     
 }

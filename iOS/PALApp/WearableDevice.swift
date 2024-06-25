@@ -8,26 +8,43 @@
 import Foundation
 import CoreBluetooth
 
-protocol WearableDevice: ObservableObject {
+class WearableDevice: ObservableObject {
     
-    init(bleManager: BLEManager, name: String)
+    var name: String
+    var bleManager: BLEManager
+    var id = UUID()
     
-    // TODO: should group all of this in some form of configuration, which is a static property
+    required init(bleManager: BLEManager, name: String) {
+        self.bleManager = bleManager
+        self.name = name
+    }
     
+    class var deviceConfiguration: WearableDeviceConfiguration {
+        return WearableDeviceConfiguration(scanServiceUUID: CBUUID(), notifyCharacteristicsUUIDs: [])
+    }
+
+}
+
+struct WearableDeviceConfiguration {
     /// UUID of service that identifies the device when scanning for BLE peripherals
-    static var scanServiceUUID: CBUUID { get }
+    var scanServiceUUID: CBUUID
     
     /// UUID of characterstics for which it wants a notification (from the start)
-    var notifyCharacteristicsUUIDs: [CBUUID] { get }
-        
-    var id: UUID { get }   
+    var notifyCharacteristicsUUIDs: [CBUUID]
+}
+
+protocol BatteryInformation {
     
     var batteryLevel: UInt8 { get }
-    
+
+}
+
+protocol AudioRecordingDevice {
+
     var isRecording: Bool { get }
     
     func start(recording: Recording)
 
     func stopRecording()
-    
+
 }

@@ -5,6 +5,7 @@
 //  Created by Eric Bariaux on 18/06/2024.
 //
 
+import SwiftData
 import SwiftUI
 import Speech
 
@@ -59,7 +60,10 @@ struct RecordingTranscriptionView: View {
 
             Text(transcribedText)
                 .padding(10)
+            
+            Spacer()
         }
+        .padding(.top, 10)
     }
     
     func transcribe() {
@@ -138,5 +142,13 @@ struct LocaleInfo: Identifiable {
 }
 
 #Preview {
-    RecordingTranscriptionView(recording: Recording(fileURL: URL(fileURLWithPath: "test.wav")))
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Recording.self, configurations: config)
+        let example = Recording(filename: "test.wav")
+        return RecordingTranscriptionView(recording: example)
+            .modelContainer(container)
+    } catch {
+        fatalError("Failed to create model container.")
+    }
 }

@@ -17,5 +17,5 @@ struct WearableInfoView: View {
 }
 
 #Preview {
-    WearableInfoView(wearable: Friend(bleManager: BLEManager(), name: "Friend"))
+    WearableInfoView(wearable: Friend(bleManager: BLEManager(deviceRegistry: WearableDeviceRegistry.shared), name: "Friend"))
 }

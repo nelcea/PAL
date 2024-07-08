@@ -10,6 +10,8 @@ import CoreBluetooth
 
 class WearableDevice: ObservableObject {
     
+    typealias DeviceReference = String
+    
     var name: String
     var bleManager: BLEManager
     var id = UUID()
@@ -20,12 +22,15 @@ class WearableDevice: ObservableObject {
     }
     
     class var deviceConfiguration: WearableDeviceConfiguration {
-        return WearableDeviceConfiguration(scanServiceUUID: CBUUID(), notifyCharacteristicsUUIDs: [])
+        return WearableDeviceConfiguration(reference: "Abstract", scanServiceUUID: CBUUID(), notifyCharacteristicsUUIDs: [])
     }
 
 }
 
 struct WearableDeviceConfiguration {
+    /// Name of the device itself (not the individual instance)
+    var reference: WearableDevice.DeviceReference
+    
     /// UUID of service that identifies the device when scanning for BLE peripherals
     var scanServiceUUID: CBUUID
     
@@ -47,4 +52,17 @@ protocol AudioRecordingDevice {
 
     func stopRecording()
 
+}
+
+class AudioPacket {
+    var packetData = Data()
+    var packetNumber: UInt16
+    
+    init(packetNumber: UInt16) {
+        self.packetNumber = packetNumber
+    }
+
+    func append(data: Data) {
+        packetData.append(data)
+    }
 }

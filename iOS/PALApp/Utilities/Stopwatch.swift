@@ -7,6 +7,10 @@
 
 import Foundation
 
+// TODO: removing that fixes concurrency warning but what about safety for UI updates
+// TODO: check talk 10019 from WWDC2021
+// Option 1: don't have @MainActor but what about safety for UI updates
+// Option 2: have @MainActor but need to have a Task on main actor in the timer closure
 @MainActor
 class Stopwatch: ObservableObject {
 

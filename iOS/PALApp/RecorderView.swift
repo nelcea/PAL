@@ -5,9 +5,11 @@
 //  Created by Eric Bariaux on 05/05/2024.
 //
 
+import SwiftData
 import SwiftUI
 
 struct RecorderView: View {
+    @Environment(\.modelContext) var modelContext
     
     @ObservedObject var bleManager: BLEManager
     @ObservedObject var wearable: WearableDevice
@@ -42,12 +44,18 @@ struct RecorderView: View {
     
     private func stopRecording() {
         stopwatch.stop()
-        recordingManager.stopRecording()
+        recordingManager.stopRecording(modelContext: modelContext)
     }
 }
 
-/*
  #Preview {
- RecorderView()
+     do {
+         let config = ModelConfiguration(isStoredInMemoryOnly: true)
+         let container = try ModelContainer(for: Recording.self, configurations: config)
+         let example = Recording(filename: "test.wav")
+         return RecordingView(recording: example)
+             .modelContainer(container)
+     } catch {
+         fatalError("Failed to create model container.")
+     }
  }
- */

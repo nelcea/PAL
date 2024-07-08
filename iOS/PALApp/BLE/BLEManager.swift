@@ -8,6 +8,7 @@
 import Foundation
 import CoreBluetooth
 import Combine
+import os
 
 enum BLEStatus {
     case off
@@ -19,22 +20,15 @@ enum BLEStatus {
     case disconnected
 }
 
-struct DiscoveredDevice: Identifiable, Hashable {
-    var id: UUID
-    var name: String
-}
-
 class BLEManager : NSObject, ObservableObject {
+    let log = Logger(subsystem: "be.nelcea.PALApp", category: "BLE")
 
+    init(deviceRegistry: WearableDeviceRegistry) {
+        self.deviceRegistry = deviceRegistry
+    }
+    
     @Published var status: BLEStatus = .off
     
-    @Published var discoveredPeripheralsMap: [UUID: CBPeripheral] = [:]
-    var discoveredPeripherals: [DiscoveredDevice] {
-        return discoveredPeripheralsMap.values.map({ peripheral in
-            let name = peripheral.name ?? peripheral.identifier.uuidString
-            return DiscoveredDevice(id: peripheral.identifier, name: name)
-        }).sorted { $0.name < $1.name }
-    }
     var servicesRegistry: [CBUUID: CBService] = [:]
     var characteristicsRegistry: [CBUUID: CBCharacteristic] = [:]
 
@@ -42,47 +36,27 @@ class BLEManager : NSObject, ObservableObject {
     
     var connectedDevice: WearableDevice?
     
-    private var wearableRegistry: [WearableDevice.Type] = []
+    private var deviceRegistry: WearableDeviceRegistry
 
     private var manager: CBCentralManager?
     private var peripheral: CBPeripheral?
-    private var scanServices: [CBUUID] = []
-    private var shouldStartScanning = false
     
-    func registerDevice(wearable: WearableDevice.Type) {
-        if !scanServices.contains(wearable.deviceConfiguration.scanServiceUUID) {
-            wearableRegistry.append(wearable)
-            scanServices.append(wearable.deviceConfiguration.scanServiceUUID)
-        }
-        // TODO: return error if service with same scan UUID already registered
-    }
-    
-    func resetDiscoveredDevices() {
-        discoveredPeripheralsMap.removeAll()
-    }
-    
-    func startScanning() {
-        resetDiscoveredDevices()
+    private var uuidToConnect: UUID?
+    private var peripheralToConnect: CBPeripheral?
+
+    func reconnect(to: UUID) {
         if manager == nil {
             manager = CBCentralManager(delegate: self, queue: nil)
         }
+        uuidToConnect = to
         if let manager, manager.state == .poweredOn {
-            forceStartScanning()
-        } else {
-            shouldStartScanning = true
+            forceConnect()
         }
     }
     
-    func stopScanning() {
-        status = .disconnected
-        manager?.stopScan()
-    }
-
-    func connect(to: UUID) {
-        if let manager, let peripheral = discoveredPeripheralsMap[to] {
-            manager.stopScan()
-            manager.connect(peripheral, options: [CBConnectPeripheralOptionNotifyOnDisconnectionKey: true])
-            status = .connecting
+    func disconnect() {
+        if let manager, let peripheral {
+            manager.cancelPeripheralConnection(peripheral)
         }
     }
     
@@ -92,11 +66,15 @@ class BLEManager : NSObject, ObservableObject {
         }
     }
     
-    /// Starts scan irrelevant of the power state of the manager, will result in error if not powered on
-    private func forceStartScanning() {
-        if let manager {
-            manager.scanForPeripherals(withServices: scanServices)
-            status = .scanning
+    /// Force connection to a peripheral irrelevant of the power state of the manager, will result in error if not powered on
+    private func forceConnect() {
+        if let manager, let uuid = uuidToConnect {
+            if let p = manager.retrievePeripherals(withIdentifiers: [uuid]).first {
+                peripheralToConnect = p
+                manager.connect(p, options: [CBConnectPeripheralOptionNotifyOnDisconnectionKey: true])
+                // connect do not timeout, need to explicitly cancel it
+            }
+            uuidToConnect = nil
         }
     }
 }
@@ -105,34 +83,35 @@ extension BLEManager : CBCentralManagerDelegate {
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         status = (central.state == .poweredOn ? .on : .off)
-        if central.state == .poweredOn && shouldStartScanning {
-            forceStartScanning()
-            shouldStartScanning = false
+
+        if central.state == .poweredOn && uuidToConnect != nil {
+            forceConnect()
         }
     }
     
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        
-        print("Discovered \(peripheral.identifier) - \(String(describing: peripheral.name))")
-
-        if discoveredPeripheralsMap[peripheral.identifier] == nil {
-            discoveredPeripheralsMap[peripheral.identifier] = peripheral
-        }
-    }
-
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         status = .connected
         self.peripheral = peripheral
+        log.info("Did connect to peripheral with identifier: \(peripheral.identifier)")
         peripheral.delegate = self
         peripheral.discoverServices(nil)
     }
     
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: (any Error)?) {
-        status = .disconnected
-        print("Did disconnect \(peripheral)")
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, timestamp: CFAbsoluteTime, isReconnecting: Bool, error: (any Error)?) {
+        log.info("Did disconnect \(peripheral), isReconnecting \(isReconnecting)")
         if let error {
-            print(error.localizedDescription)
+            log.info("\(error.localizedDescription)")
         }
+        connectedDevice = nil
+        characteristicsRegistry.removeAll()
+        servicesRegistry.removeAll()
+        self.peripheral = nil
+        status = .disconnected
+        
+        /*
+         Did disconnect <CBPeripheral: 0x301d20410, identifier = CDB4FE3D-F827-2E5E-BCE0-39FAA839BD8E, name = Friend, mtu = 23, state = disconnected>
+         The connection has timed out unexpectedly.
+         */
     }
 
 }
@@ -141,14 +120,14 @@ extension BLEManager : CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: (any Error)?) {
         if let services = peripheral.services {
             for service in services {
-                if let wearable = wearableRegistry.first(where: { $0.deviceConfiguration.scanServiceUUID == service.uuid }) {
+                if let wearable = deviceRegistry.deviceTypeForService(uuid: service.uuid) {
                     connectedDevice = wearable.init(bleManager: self, name: peripheral.name ?? peripheral.identifier.uuidString)
                     status = .linked
                 }
             }
             
             for service in services {
-                print("Discovered service \(service)")
+                log.debug("Discovered service \(service)")
                 servicesRegistry[service.uuid] = service
                 peripheral.discoverCharacteristics(nil, for: service)
             }
@@ -159,10 +138,10 @@ extension BLEManager : CBPeripheralDelegate {
         if let characteristics = service.characteristics {
             for c in characteristics {
                 characteristicsRegistry[c.uuid] = c
-                print("Discovered characteristic \(c)")
+                log.debug("Discovered characteristic \(c)")
                 if let connectedDevice {
                     if type(of: connectedDevice).deviceConfiguration.notifyCharacteristicsUUIDs.contains(c.uuid) {
-                        print("Asking for notifications")
+                        log.debug("Asking for notifications")
                         peripheral.setNotifyValue(true, for: c)
                         peripheral.readValue(for: c)
                     } else {
@@ -174,7 +153,6 @@ extension BLEManager : CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: (any Error)?) {
-        print("didUpdateValue \(characteristic)")
         if let v = characteristic.value {
             valueChanges.send((characteristic.uuid, v))
         }

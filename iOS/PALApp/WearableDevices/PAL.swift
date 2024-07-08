@@ -13,6 +13,7 @@ class PAL : WearableDevice {
 
     override class var deviceConfiguration: WearableDeviceConfiguration {
         return WearableDeviceConfiguration(
+            reference: "PAL",
             scanServiceUUID: CBUUID(string: "D860A1D3-736F-473A-8B27-C0DA611B61D2"),
             notifyCharacteristicsUUIDs: [])
     }

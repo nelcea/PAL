@@ -21,7 +21,7 @@ protocol Codec {
     
     func pcmBuffer(data: Data) throws -> AVAudioPCMBuffer
     
-    func decode(data: Data) -> Data
+    func decode(data: Data) throws -> Data
 }
 
 extension Codec {
@@ -30,7 +30,7 @@ extension Codec {
             throw CodecError.invalidAudioFormat
         }
 
-        let decodedData = decode(data: data)
+        let decodedData = data // decode(data: data)
         
         guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: UInt32(decodedData.count / MemoryLayout<Int16>.size)) else {
             throw CodecError.audioBufferCreationError
@@ -112,4 +112,5 @@ struct OpusCodec: Codec {
     init(sampleRate: Double) {
         self.sampleRate = sampleRate
     }
+
 }

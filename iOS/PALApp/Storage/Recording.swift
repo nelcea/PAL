@@ -8,42 +8,59 @@
 import Foundation
 import AVFoundation
 import CoreTransferable
+import SwiftData
 
-class Recording: Identifiable, Hashable {
-    
-    static func == (lhs: Recording, rhs: Recording) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
+@Model
+class Recording: Identifiable {
+
     var id = UUID()
-    var fileURL: URL
+    var filename: String
+    var name: String
+    var comment = ""
+    var timestamp: Date
+    var duration_: Double?
     
-    private var audioFormat: AVAudioFormat?
-    private var codec: Codec?
-    private var recordingFile: AVAudioFile?
+    var duration: Duration? {
+        get {
+            if let seconds = duration_ {
+                return Duration.seconds(seconds)
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let d = newValue {
+                duration_ = d.inSeconds
+            } else {
+                duration_ = nil
+            }
+        }
+    }
+
+    @Transient var fileURL: URL {
+        RecordingManager.getDocumentsDirectory().appendingPathComponent(filename)
+    }
+
+    @Transient private var audioFormat: AVAudioFormat?
+    @Transient private var codec: Codec?
+    @Transient private var recordingFile: AVAudioFile?
     
-    init(fileURL: URL) {
-        self.fileURL = fileURL
+    init(filename: String) {
+        self.filename = filename
+        self.name = filename
+        self.timestamp = Self.extractStartDate(filename: filename)
     }
     
-    var startDate: Date {
-        let timestampString = fileURL.lastPathComponent.deletingPrefix("Recording_").deletingSuffix(".wav")
+    private static func extractStartDate(filename: String) -> Date {
+        let timestampString = filename.deletingPrefix("Recording_").deletingSuffix(".wav")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
         return dateFormatter.date(from: timestampString) ?? Date()
     }
     
-    var duration: Duration?
-    
     func readInfo() {
         if let file = try? AVAudioFile(forReading: fileURL) {
-            let secondsDuration = Double(file.length) / file.fileFormat.sampleRate
-            let usecondsDuration = secondsDuration.truncatingRemainder(dividingBy: 1) * 1_000_000
-            duration = Duration(timeval(tv_sec: Int(secondsDuration), tv_usec:Int32(usecondsDuration)))
+            duration = Duration.seconds(Double(file.length) / file.fileFormat.sampleRate)
         }
     }
     
@@ -57,11 +74,14 @@ class Recording: Identifiable, Hashable {
         return recordingFile != nil
     }
     
-    // data must contain audio in Int16, little endian
-    func append(data: Data) {
+    func append(packets: [AudioPacket]) {
         if let recordingFile, let codec {
             do {
-                let pcmBuffer = try codec.pcmBuffer(data: data)
+                var decodedDataBlock = Data()
+                for packet in packets {
+                    try decodedDataBlock.append(codec.decode(data: packet.packetData))
+                }
+                let pcmBuffer = try codec.pcmBuffer(data: decodedDataBlock)
                 try recordingFile.write(from: pcmBuffer)
                 print("Saved a block of \(pcmBuffer.frameLength) samples")
             } catch {
@@ -69,10 +89,23 @@ class Recording: Identifiable, Hashable {
             }
         }
     }
-    
+
     func closeRecording() {
         recordingFile = nil
         codec = nil
+    }
+}
+
+
+extension Recording: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension Recording: Equatable {
+    static func == (lhs: Recording, rhs: Recording) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
@@ -82,7 +115,7 @@ extension Recording: Transferable {
             SentTransferredFile(recording.fileURL)
         } importing: { data in
             // TODO: write data to doc folder
-            Recording(fileURL: URL(filePath: ""))
+            Recording(filename: "")
         }
     }
     
@@ -97,5 +130,12 @@ extension String {
     func deletingSuffix(_ suffix: String) -> String {
         guard self.hasSuffix(suffix) else { return self }
         return String(self.dropLast(suffix.count))
+    }
+}
+
+extension Duration {
+    var inSeconds: Double {
+        let v = components
+        return Double(v.seconds) + Double(v.attoseconds) * 1e-18
     }
 }

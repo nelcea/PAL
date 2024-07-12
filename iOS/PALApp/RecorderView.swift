@@ -20,20 +20,25 @@ struct RecorderView: View {
     @ObservedObject var recordingManager: RecordingManager
 
     @ObservedObject var stopwatch =  Stopwatch()
-    
-    
+
     var body: some View {
-        Button() {
-            if device.isRecording {
-                stopRecording()
-            } else {
-                startRecording()
+        switch (wearable.status) {
+        case .ready:
+            HStack {
+                Button() {
+                    if device.isRecording {
+                        stopRecording()
+                    } else {
+                        startRecording()
+                    }
+                } label: {
+                    RecordingButton(isRecording: device.isRecording)
+                }
+                Text(device.isRecording ? stopwatch.formattedTime : "")
+                    .font(Font.largeTitle.monospacedDigit())
             }
-        } label: {
-            Label(device.isRecording ? "stop" : "record", systemImage: device.isRecording ? "stop.circle" : "record.circle")
-        }
-        if device.isRecording {
-            Text(stopwatch.formattedTime)
+        case .error(let message):
+            Text(message)
         }
     }
     
@@ -47,6 +52,28 @@ struct RecorderView: View {
         recordingManager.stopRecording(modelContext: modelContext)
     }
 }
+
+struct RecordingButton: View {
+    
+    var isRecording: Bool
+    
+    var body: some View {
+        ZStack {
+            Color.gray
+                .frame(width: 40, height: 40)
+                .clipShape(.circle)
+            Color.white
+                .frame(width: 36, height: 36)
+                .clipShape(.circle)
+            let size = isRecording ? 20.0 : 32.0
+            Color.red
+                .frame(width: size, height: size)
+                .clipShape(isRecording ? AnyShape(RoundedRectangle(cornerRadius: 5)) : AnyShape(Circle()))
+        }
+    }
+    
+}
+
 
  #Preview {
      do {

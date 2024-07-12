@@ -15,6 +15,7 @@ class WearableDevice: ObservableObject {
     var name: String
     var bleManager: BLEManager
     var id = UUID()
+    @Published var status = WearableDeviceStatus.error(message: "Not initialized")
     
     required init(bleManager: BLEManager, name: String) {
         self.bleManager = bleManager
@@ -36,6 +37,11 @@ struct WearableDeviceConfiguration {
     
     /// UUID of characterstics for which it wants a notification (from the start)
     var notifyCharacteristicsUUIDs: [CBUUID]
+}
+
+enum WearableDeviceStatus {
+    case ready
+    case error(message: String)
 }
 
 protocol BatteryInformation {

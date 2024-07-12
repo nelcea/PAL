@@ -54,6 +54,12 @@ class BLEManager : NSObject, ObservableObject {
         }
     }
     
+    func stopConnecting() {
+        if let manager, let peripheralToConnect {
+            manager.cancelPeripheralConnection(peripheralToConnect)
+        }
+    }
+    
     func disconnect() {
         if let manager, let peripheral {
             manager.cancelPeripheralConnection(peripheral)
@@ -71,6 +77,7 @@ class BLEManager : NSObject, ObservableObject {
         if let manager, let uuid = uuidToConnect {
             if let p = manager.retrievePeripherals(withIdentifiers: [uuid]).first {
                 peripheralToConnect = p
+                status = .connecting
                 manager.connect(p, options: [CBConnectPeripheralOptionNotifyOnDisconnectionKey: true])
                 // connect do not timeout, need to explicitly cancel it
             }

@@ -20,12 +20,10 @@ struct WearableDeviceHeaderView: View {
 
     var body: some View {
         HStack {
-            Text(wearable.name)
-                .font(.title3)
-                .padding(.trailing, 10)
             Image(systemName: "link")
                 .padding(.trailing, 30)
             Image(systemName: batterySymbolName)
+                .padding(.trailing, 30)
         }
     }
 }

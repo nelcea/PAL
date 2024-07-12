@@ -9,6 +9,12 @@ import Foundation
 import CoreBluetooth
 
 class PAL : WearableDevice {
+    
+    required init(bleManager: BLEManager, name: String) {
+        super.init(bleManager: bleManager, name: name)
+        status = .error(message: "Unsupported device")
+    }
+    
     var batteryLevel: UInt8 = 0
 
     override class var deviceConfiguration: WearableDeviceConfiguration {

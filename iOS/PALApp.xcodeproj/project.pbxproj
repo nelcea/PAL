@@ -27,6 +27,8 @@
 		91CFACEE2C36966E0058A08C /* BLEScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CFACED2C36966E0058A08C /* BLEScanner.swift */; };
 		91CFACFF2C37E7880058A08C /* BatteryLevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CFACFE2C37E7880058A08C /* BatteryLevelTests.swift */; };
 		91CFAD012C37EBC10058A08C /* WearableDeviceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CFAD002C37EBC10058A08C /* WearableDeviceHeaderView.swift */; };
+		91D4BC522C406B7D00703F74 /* PacketCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D4BC512C406B7D00703F74 /* PacketCounter.swift */; };
+		91D4BC542C406C3D00703F74 /* PacketCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D4BC532C406C3D00703F74 /* PacketCounterTests.swift */; };
 		91EFC5532BDCEFBB0098D265 /* PALAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5522BDCEFBB0098D265 /* PALAppApp.swift */; };
 		91EFC5552BDCEFBB0098D265 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5542BDCEFBB0098D265 /* ContentView.swift */; };
 		91EFC5572BDCEFBC0098D265 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91EFC5562BDCEFBC0098D265 /* Assets.xcassets */; };
@@ -72,6 +74,8 @@
 		91CFACF52C37E76C0058A08C /* PALAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PALAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CFACFE2C37E7880058A08C /* BatteryLevelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryLevelTests.swift; sourceTree = "<group>"; };
 		91CFAD002C37EBC10058A08C /* WearableDeviceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearableDeviceHeaderView.swift; sourceTree = "<group>"; };
+		91D4BC512C406B7D00703F74 /* PacketCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketCounter.swift; sourceTree = "<group>"; };
+		91D4BC532C406C3D00703F74 /* PacketCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketCounterTests.swift; sourceTree = "<group>"; };
 		91EFC54F2BDCEFBB0098D265 /* PALApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PALApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91EFC5522BDCEFBB0098D265 /* PALAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PALAppApp.swift; sourceTree = "<group>"; };
 		91EFC5542BDCEFBB0098D265 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 				916A24B62BEF52A500F32E0D /* AudioPlayer.swift */,
 				916F8BB42C2976830017E0EA /* Codecs.swift */,
 				916A24B42BED5BF300F32E0D /* Stopwatch.swift */,
+				91D4BC512C406B7D00703F74 /* PacketCounter.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -152,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				91CFACFE2C37E7880058A08C /* BatteryLevelTests.swift */,
+				91D4BC532C406C3D00703F74 /* PacketCounterTests.swift */,
 			);
 			path = PALAppTests;
 			sourceTree = "<group>";
@@ -316,6 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91D4BC542C406C3D00703F74 /* PacketCounterTests.swift in Sources */,
 				91CFACFF2C37E7880058A08C /* BatteryLevelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +337,7 @@
 				91BC88962C214DAA0061AB2F /* RecordingTranscriptionView.swift in Sources */,
 				91EFC56F2BE003290098D265 /* RecordingManager.swift in Sources */,
 				916A24B72BEF52A500F32E0D /* AudioPlayer.swift in Sources */,
+				91D4BC522C406B7D00703F74 /* PacketCounter.swift in Sources */,
 				91EFC5692BDCFC520098D265 /* PAL.swift in Sources */,
 				91EFC5632BDCF04B0098D265 /* BLEManager.swift in Sources */,
 				916A24922BE7694000F32E0D /* RecordingsListView.swift in Sources */,

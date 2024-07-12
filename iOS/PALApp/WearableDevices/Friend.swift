@@ -25,9 +25,19 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
     @Published var isRecording = false
     private var recording: Recording?
     
-    private var codec: FriendCodec?
+    private var codec: FriendCodec? {
+        didSet {
+            if let codec {
+                if codec != .opus16 {
+                    status = .ready
+                } else {
+                    status = .error(message: "Opus codec not supported")
+                }
+            }
+        }
+    }
     
-    private var lastPacketNumber: UInt16?
+    private var packetCounter = PacketCounter()
     private var packetsBuffer = [AudioPacket]()
     
     required init(bleManager: BLEManager, name: String) {
@@ -38,21 +48,13 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
             
             switch uuid {
             case BatteryService.batteryLevelCharacteristicUUID:
-                if let self {
-                    self.batteryCharacteristicUpdated(data: data)
-                }
+                self?.batteryCharacteristicUpdated(data: data)
             case Friend.audioCharacteristicUUID:
-                if let self {
-                    self.audioCharacteristicUpdated(data: data)
-                }
+                self?.audioCharacteristicUpdated(data: data)
             case Friend.audioCodecCharacteristicUUID:
-                if let self {
-                    self.audioCodecCharacteristicUpdated(data: data)
-                }
+                self?.audioCodecCharacteristicUpdated(data: data)
             default:
-                if let self {
-                    self.log.warning("Received value for unknown characteristic UUID \(uuid)")
-                }
+                self?.log.warning("Received value for unknown characteristic UUID \(uuid)")
             }
         })
     }
@@ -78,13 +80,12 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
         log.info("Packet number \(packetNumber)")
         log.info("Index \(index)")
         
-        if let lpn = lastPacketNumber {
-            if packetNumber != lpn + 1 {
-                log.warning("### Error, missing packet")
-            }
+        do {
+            try packetCounter.checkPacketNumber(packetNumber)
+        } catch {
+            log.warning("### Error, missing packet")
         }
-        lastPacketNumber = packetNumber
-        
+
         if index == 0 {
             // Only flush if we're starting a new packet, otherwise we would split between packet content
             if packetsBuffer.count == 100 {
@@ -124,7 +125,7 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
         isRecording = false
         flushRecordingBuffer()
         recording?.closeRecording()
-        lastPacketNumber = nil
+        packetCounter.reset()
     }
     
     private func flushRecordingBuffer() {

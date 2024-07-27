@@ -21,5 +21,11 @@ struct PALAppApp: App {
             ContentView()
         }
         .modelContainer(for: [Configuration.self, Recording.self, UserDevice.self])
+        #if os(macOS)
+        Settings {
+            SettingsView(bleManager: BLEManager(deviceRegistry: WearableDeviceRegistry.shared), isShowingSettings: .constant(true))
+        }
+        .modelContainer(for: [Configuration.self, Recording.self, UserDevice.self])
+        #endif
     }
 }

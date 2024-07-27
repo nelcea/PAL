@@ -27,13 +27,7 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
     
     private var codec: FriendCodec? {
         didSet {
-            if let codec {
-                if codec != .opus16 {
-                    status = .ready
-                } else {
-                    status = .error(message: "Opus codec not supported")
-                }
-            }
+            status = .ready
         }
     }
     
@@ -70,15 +64,19 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
     }
     
     private func audioCharacteristicUpdated(data: Data) {
-        log.info("Received packet of size \(data.count)")
-        guard data.count >= 3 else { return }
+        log.debug("Received packet of size \(data.count)")
+        guard data.count >= 3 else {
+            log.warning("### Received a packet of size \(data.count)")
+            return
+        }
+        
         // Starts at 0 on first notification, continues the sequence after a pause but I have seen a small gap
         let packetNumber = UInt16(littleEndian: data.withUnsafeBytes { $0.load(as: UInt16.self) })
         // Starts at 0
         let index = UInt8(littleEndian: data.advanced(by: 2).withUnsafeBytes {$0.load(as: UInt8.self) })
         
-        log.info("Packet number \(packetNumber)")
-        log.info("Index \(index)")
+        log.debug("Packet number \(packetNumber)")
+        log.debug("Index \(index)")
         
         do {
             try packetCounter.checkPacketNumber(packetNumber)
@@ -113,7 +111,8 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
     
     func start(recording: Recording) {
         self.recording = recording
-        guard let audioCodec = codec?.codec else { return }
+
+        guard let audioCodec = try? codec?.codec else { return }
         if recording.startRecording(usingCodec: audioCodec) {
             isRecording = true
             bleManager.setNotify(enabled: true, forCharacteristics: Friend.audioCharacteristicUUID)
@@ -139,17 +138,19 @@ class Friend : WearableDevice, BatteryInformation, AudioRecordingDevice {
         case opus16 = 20
         
         var codec: Codec {
-            switch self {
-            case .pcm8:
-                return PcmCodec(sampleRate: 8000.0)
-            case .µLaw8:
-                return µLawCodec(sampleRate: 8000.0)
-            case .pcm16:
-                return PcmCodec(sampleRate: 16000.0)
-            case .µLaw16:
-                return µLawCodec(sampleRate: 16000.0)
-            case .opus16:
-                return OpusCodec(sampleRate: 16000.0)
+            get throws {
+                switch self {
+                case .pcm8:
+                    return PcmCodec(sampleRate: 8000.0)
+                case .µLaw8:
+                    return µLawCodec(sampleRate: 8000.0)
+                case .pcm16:
+                    return PcmCodec(sampleRate: 16000.0)
+                case .µLaw16:
+                    return µLawCodec(sampleRate: 16000.0)
+                case .opus16:
+                    return try OpusCodec(sampleRate: 16000.0)
+                }
             }
         }
     }

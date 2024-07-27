@@ -11,7 +11,8 @@ import SwiftData
 @Model
 class Configuration {
     var selectedDevice: UserDevice?
-    
+    var serverName: String?
+
     init() {
     }
 }

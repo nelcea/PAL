@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import Opus
 
 // TODO: Can we have some automated tests ?
 
@@ -17,20 +18,18 @@ enum CodecError: Error {
 protocol Codec {
     var sampleRate: Double { get }
     
-    init(sampleRate: Double)
+    init(sampleRate: Double) throws
     
-    func pcmBuffer(data: Data) throws -> AVAudioPCMBuffer
+    func pcmBuffer(decodedData: Data) throws -> AVAudioPCMBuffer
     
     func decode(data: Data) throws -> Data
 }
 
 extension Codec {
-    func pcmBuffer(data: Data) throws -> AVAudioPCMBuffer {
+    func pcmBuffer(decodedData: Data) throws -> AVAudioPCMBuffer {
         guard let audioFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: sampleRate, channels: 1, interleaved: false) else {
             throw CodecError.invalidAudioFormat
         }
-
-        let decodedData = data // decode(data: data)
         
         guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: UInt32(decodedData.count / MemoryLayout<Int16>.size)) else {
             throw CodecError.audioBufferCreationError
@@ -108,9 +107,23 @@ struct µLawCodec: Codec {
 
 struct OpusCodec: Codec {
     let sampleRate: Double
+    let opusDecoder: Opus.Decoder
     
-    init(sampleRate: Double) {
+    init(sampleRate: Double) throws {
         self.sampleRate = sampleRate
+        guard let opusFormat = AVAudioFormat(opusPCMFormat: .int16, sampleRate: .opus16khz, channels: 1) else {
+            throw CodecError.invalidAudioFormat
+        }
+        opusDecoder = try Opus.Decoder(format: opusFormat)
     }
-
+    
+    func decode(data: Data) throws -> Data {
+        do {
+            return try opusDecoder.decodeToData(data)
+        } catch {
+            print(error.localizedDescription)
+            throw CodecError.audioBufferCreationError
+        }
+    }
 }
+

@@ -81,9 +81,8 @@ class Recording: Identifiable {
                 for packet in packets {
                     try decodedDataBlock.append(codec.decode(data: packet.packetData))
                 }
-                let pcmBuffer = try codec.pcmBuffer(data: decodedDataBlock)
+                let pcmBuffer = try codec.pcmBuffer(decodedData: decodedDataBlock)
                 try recordingFile.write(from: pcmBuffer)
-                print("Saved a block of \(pcmBuffer.frameLength) samples")
             } catch {
                 print(error.localizedDescription)
             }
@@ -137,5 +136,19 @@ extension Duration {
     var inSeconds: Double {
         let v = components
         return Double(v.seconds) + Double(v.attoseconds) * 1e-18
+    }
+}
+
+struct RecordingDTO: Codable {
+    var id: String
+    var filename: String
+    var name: String
+    var comment: String
+    var timestamp: Date
+}
+
+extension Recording {
+    func toDTO() -> RecordingDTO {
+        return RecordingDTO(id: self.id.uuidString, filename: self.filename, name: self.name, comment: self.comment, timestamp: self.timestamp)
     }
 }

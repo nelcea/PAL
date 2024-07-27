@@ -37,9 +37,16 @@ class RecordingManager: ObservableObject {
         modelContext.insert(recording)
     }
     
-    func listRecordings() {
+    func listRecordings(modelContext: ModelContext) {
         let fm = FileManager.default
         do {
+            print("From DB")
+            let descriptor = FetchDescriptor<Recording>()
+            let recordings = try modelContext.fetch(descriptor)
+            for recording in recordings {
+                print("Recording \(recording.id): \(recording.filename)")
+            }
+            print("From FS")
             let files = try fm.contentsOfDirectory(atPath: Self.getDocumentsDirectory().path())
             for filename in files {
                 print(Self.getDocumentsDirectory().appendingPathComponent(filename))

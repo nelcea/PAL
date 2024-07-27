@@ -16,7 +16,9 @@ struct SettingsView: View {
     @State private var settingScrens: [SettingScreen] = []
     
     @State private var selectedDevice: UserDevice?
+    @State private var editedDevice: UserDevice?
     
+    @State private var serverName = ""
     @Environment(\.modelContext) var modelContext
     @Query var devices: [UserDevice]
     
@@ -27,7 +29,16 @@ struct SettingsView: View {
             List {
                 Section("Wearable devices") {
                     ForEach(devices) { device in
-                        Text(device.name)
+                        HStack {
+                            Text(device.name)
+                            Spacer()
+                            Button {
+                                editedDevice = device
+                                settingScrens = [.editDevice]
+                            } label: {
+                                Image(systemName: "info")
+                            }
+                        }
                     }
                     .onDelete(perform: deleteDevice)
                 }
@@ -49,15 +60,29 @@ struct SettingsView: View {
                         
                     }
                     Button("List recordings") {
-                        recordingManager.listRecordings()
+                        recordingManager.listRecordings(modelContext: modelContext)
                     }
                 }
                 
                 Section {
-                    Button("Ping server") {
-                        // TODO: try to connect to server
-                        
-                        // Eventually, should also allow to define the server address
+                    #if os(iOS)
+                    TextField("Server name", text: $serverName)
+                        .keyboardType(.URL)
+                        .textInputAutocapitalization(.never)
+                        .onSubmit {
+                            do {
+                                let configuration = try getOrCreateConfiguration(modelContext: modelContext)
+                                configuration.serverName = serverName
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                    #else
+                    TextField("Server name", text: $serverName)
+                    // TODO: store servername -> in function
+                    #endif
+                    Button("Push to server") {
+                        pushToServer()
                     }
                 }
             }
@@ -78,6 +103,8 @@ struct SettingsView: View {
                 switch(screen) {
                 case .addDevice:
                     WearableDeviceSelectionView(selectedDevice: $selectedDevice)
+                case .editDevice:
+                    EditUserDeviceView(userDevice: $editedDevice)
                 }
             }
             .onChange(of: selectedDevice) {
@@ -94,11 +121,23 @@ struct SettingsView: View {
                     }
                 }
             }
+            .task {
+                do {
+                    let configuration = try getOrCreateConfiguration(modelContext: modelContext)
+                    
+                    Task { @MainActor in
+                        serverName = configuration.serverName ?? ""
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
 
     enum SettingScreen {
         case addDevice
+        case editDevice
     }
 
     func addDevice() {
@@ -124,6 +163,33 @@ struct SettingsView: View {
             }
         }
     }
+    
+    func pushToServer() {
+        print("Push to server")
+        do {
+            let descriptor = FetchDescriptor<Recording>()
+            let recordings = try modelContext.fetch(descriptor)
+            
+            let recordingsAPI = RecordingsAPI(serverName: serverName)
+            
+            Task {
+                for recording in recordings {
+                    let recordingExists = try await recordingsAPI.doesRecordingExistOnServer(recording: recording)
+                    if !recordingExists {
+                        print("Pushing \(recording.name)")
+                        try await recordingsAPI.pushRecording(recording: recording)
+                        
+                    }
+                    let audioExists = try await recordingsAPI.doesAudioExistOnServer(recording: recording)
+                    if !audioExists {
+                        try await recordingsAPI.pushAudio(recording: recording)
+                    }
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }   
 }
 
 #Preview {

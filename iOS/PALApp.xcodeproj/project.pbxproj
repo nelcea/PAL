@@ -14,7 +14,10 @@
 		916A24B52BED5BF300F32E0D /* Stopwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A24B42BED5BF300F32E0D /* Stopwatch.swift */; };
 		916A24B72BEF52A500F32E0D /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A24B62BEF52A500F32E0D /* AudioPlayer.swift */; };
 		916A24B92BF0C96000F32E0D /* WearableInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A24B82BF0C96000F32E0D /* WearableInfoView.swift */; };
+		916F8BB12C2948C40017E0EA /* Copus in Frameworks */ = {isa = PBXBuildFile; productRef = 916F8BB02C2948C40017E0EA /* Copus */; };
+		916F8BB32C2948C40017E0EA /* Opus in Frameworks */ = {isa = PBXBuildFile; productRef = 916F8BB22C2948C40017E0EA /* Opus */; };
 		916F8BB52C2976830017E0EA /* Codecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916F8BB42C2976830017E0EA /* Codecs.swift */; };
+		917C2B262C53DEA30030C51F /* EditUserDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917C2B252C53DEA30030C51F /* EditUserDeviceView.swift */; };
 		91928F922BFFA69400C3B9B0 /* BLEAssignedNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91928F912BFFA69400C3B9B0 /* BLEAssignedNumber.swift */; };
 		91BC88942C214ABE0061AB2F /* RecordingPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC88932C214ABE0061AB2F /* RecordingPlayerView.swift */; };
 		91BC88962C214DAA0061AB2F /* RecordingTranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC88952C214DAA0061AB2F /* RecordingTranscriptionView.swift */; };
@@ -29,6 +32,7 @@
 		91CFAD012C37EBC10058A08C /* WearableDeviceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CFAD002C37EBC10058A08C /* WearableDeviceHeaderView.swift */; };
 		91D4BC522C406B7D00703F74 /* PacketCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D4BC512C406B7D00703F74 /* PacketCounter.swift */; };
 		91D4BC542C406C3D00703F74 /* PacketCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D4BC532C406C3D00703F74 /* PacketCounterTests.swift */; };
+		91E0D3902C4AD014000DB0C9 /* RecordingsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E0D38F2C4AD014000DB0C9 /* RecordingsAPI.swift */; };
 		91EFC5532BDCEFBB0098D265 /* PALAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5522BDCEFBB0098D265 /* PALAppApp.swift */; };
 		91EFC5552BDCEFBB0098D265 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EFC5542BDCEFBB0098D265 /* ContentView.swift */; };
 		91EFC5572BDCEFBC0098D265 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91EFC5562BDCEFBC0098D265 /* Assets.xcassets */; };
@@ -61,6 +65,7 @@
 		916A24B62BEF52A500F32E0D /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		916A24B82BF0C96000F32E0D /* WearableInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearableInfoView.swift; sourceTree = "<group>"; };
 		916F8BB42C2976830017E0EA /* Codecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codecs.swift; sourceTree = "<group>"; };
+		917C2B252C53DEA30030C51F /* EditUserDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserDeviceView.swift; sourceTree = "<group>"; };
 		91928F912BFFA69400C3B9B0 /* BLEAssignedNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAssignedNumber.swift; sourceTree = "<group>"; };
 		91BC88932C214ABE0061AB2F /* RecordingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingPlayerView.swift; sourceTree = "<group>"; };
 		91BC88952C214DAA0061AB2F /* RecordingTranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingTranscriptionView.swift; sourceTree = "<group>"; };
@@ -76,6 +81,7 @@
 		91CFAD002C37EBC10058A08C /* WearableDeviceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearableDeviceHeaderView.swift; sourceTree = "<group>"; };
 		91D4BC512C406B7D00703F74 /* PacketCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketCounter.swift; sourceTree = "<group>"; };
 		91D4BC532C406C3D00703F74 /* PacketCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketCounterTests.swift; sourceTree = "<group>"; };
+		91E0D38F2C4AD014000DB0C9 /* RecordingsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsAPI.swift; sourceTree = "<group>"; };
 		91EFC54F2BDCEFBB0098D265 /* PALApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PALApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91EFC5522BDCEFBB0098D265 /* PALAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PALAppApp.swift; sourceTree = "<group>"; };
 		91EFC5542BDCEFBB0098D265 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -104,6 +110,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				916F8BB12C2948C40017E0EA /* Copus in Frameworks */,
+				916F8BB32C2948C40017E0EA /* Opus in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +170,14 @@
 			path = PALAppTests;
 			sourceTree = "<group>";
 		};
+		91E0D38E2C4ACFFD000DB0C9 /* ServerAPI */ = {
+			isa = PBXGroup;
+			children = (
+				91E0D38F2C4AD014000DB0C9 /* RecordingsAPI.swift */,
+			);
+			path = ServerAPI;
+			sourceTree = "<group>";
+		};
 		91EFC5462BDCEFBB0098D265 = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +209,7 @@
 				9157F0332C3A9D3A00F4A5C6 /* BLE */,
 				9157F0342C3A9DB900F4A5C6 /* Utilities */,
 				9157F0352C3A9DDE00F4A5C6 /* Storage */,
+				91E0D38E2C4ACFFD000DB0C9 /* ServerAPI */,
 				91EFC56E2BE003290098D265 /* RecordingManager.swift */,
 				916A24912BE7694000F32E0D /* RecordingsListView.swift */,
 				91EFC5702BE0BAD50098D265 /* RecordingView.swift */,
@@ -204,6 +221,7 @@
 				91C5903A2C33D5CD00721380 /* SettingsView.swift */,
 				91CFACEB2C36959F0058A08C /* WearableDeviceSelectionView.swift */,
 				91CFAD002C37EBC10058A08C /* WearableDeviceHeaderView.swift */,
+				917C2B252C53DEA30030C51F /* EditUserDeviceView.swift */,
 				91C590592C353C1F00721380 /* README.md */,
 			);
 			path = PALApp;
@@ -252,6 +270,8 @@
 			);
 			name = PALApp;
 			packageProductDependencies = (
+				916F8BB02C2948C40017E0EA /* Copus */,
+				916F8BB22C2948C40017E0EA /* Opus */,
 			);
 			productName = PALApp;
 			productReference = 91EFC54F2BDCEFBB0098D265 /* PALApp.app */;
@@ -286,6 +306,7 @@
 			);
 			mainGroup = 91EFC5462BDCEFBB0098D265;
 			packageReferences = (
+				916F8BAF2C2948C40017E0EA /* XCRemoteSwiftPackageReference "swift-opus" */,
 			);
 			productRefGroup = 91EFC5502BDCEFBB0098D265 /* Products */;
 			projectDirPath = "";
@@ -353,12 +374,14 @@
 				91C5903D2C33E1D600721380 /* UserDevice.swift in Sources */,
 				91EFC5712BE0BAD50098D265 /* RecordingView.swift in Sources */,
 				916A24B92BF0C96000F32E0D /* WearableInfoView.swift in Sources */,
+				91E0D3902C4AD014000DB0C9 /* RecordingsAPI.swift in Sources */,
 				91BC88942C214ABE0061AB2F /* RecordingPlayerView.swift in Sources */,
 				91EFC5652BDCFB8C0098D265 /* WearableDevice.swift in Sources */,
 				9157F0322C3838F300F4A5C6 /* ConfigurationRepository.swift in Sources */,
 				91EFC5532BDCEFBB0098D265 /* PALAppApp.swift in Sources */,
 				91EFC56D2BDF68520098D265 /* Recording.swift in Sources */,
 				91C5903B2C33D5CD00721380 /* SettingsView.swift in Sources */,
+				917C2B262C53DEA30030C51F /* EditUserDeviceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,7 +563,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PALApp/PALApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"PALApp/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -582,7 +605,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PALApp/PALApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"PALApp/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -648,6 +671,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		916F8BAF2C2948C40017E0EA /* XCRemoteSwiftPackageReference "swift-opus" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nelcea/swift-opus";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		916F8BB02C2948C40017E0EA /* Copus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 916F8BAF2C2948C40017E0EA /* XCRemoteSwiftPackageReference "swift-opus" */;
+			productName = Copus;
+		};
+		916F8BB22C2948C40017E0EA /* Opus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 916F8BAF2C2948C40017E0EA /* XCRemoteSwiftPackageReference "swift-opus" */;
+			productName = Opus;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 91EFC5472BDCEFBB0098D265 /* Project object */;
 }

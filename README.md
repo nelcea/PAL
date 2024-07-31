@@ -1,4 +1,4 @@
-PAL is the generic project for my research in the world of Wearable AI.
+PAL (Personal AI Lab) is the generic project for my research in the world of Wearable AI.
 For some more background on the project, see [The PAL Project - Bokeh](https://www.ericbariaux.com/posts/the-pal-project/)
 
 In a first phase, I catalogued the main projects currently underway at [Pinboard - Wearable AI projects](https://www.ericbariaux.com/pinboard/).
@@ -16,5 +16,4 @@ There was no effort on the UI/UX at this stage and code needs a bit of clean-up.
 It's provided as is for people that would already find it useful or want to see how to setup a connection with Friend.  
 
 Known issues:
-- Opus codec not implemented
 - Battery drain
